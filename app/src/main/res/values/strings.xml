@@ -1,4 +1,27 @@
 <resources>
-    <string name="app_name">TrabalhoAvaliacaoMusical</string>
+    <string name="app_name">Rating Music</string>
     <string name="ultimas_avaliacoes">Latest Ratings</string>
+    <string name="sobre">About</string>
+    <string name="adicionar">Add</string>
+    <string name="ordenacao">Ordenation</string>
+    <string name="sobre_este_app">About this app</string>
+    <string name="autor">Author: Gabriel Siqueira de Carvalho</string>
+    <string name="curso">Specialization Course in Java Technology</string>
+    <string name="email" translatable="false">gabrielsiqueiracarvalho@alunos.utfpr.edu.br</string>
+    <string name="descricao">Application made to rate music albums.</string>
+    <string name="logo_utfpr" translatable="false">Logo UTFPR</string>
+    <string name="editar">Edit</string>
+    <string name="excluir">Delete</string>
+    <string name="o_album">The album</string>
+    <string name="foi_selecionado">" was selected"</string>
+    <string name="avaliar">Rate</string>
+    <string name="nome_album">Album name</string>
+    <string name="data_lancamento">Release date</string>
+    <string name="artista">Artist</string>
+    <string name="preencha_todos_os_campos">Fill all the fields!</string>
+    <string name="nova_avaliacao">New Rating</string>
+    <string name="editar_avaliacao">Edit Rating</string>
+    <string name="salvar">Save</string>
+    <string name="limpar">Clear</string>
+    <string name="campos_limpos">Fields cleaned!</string>
 </resources>
