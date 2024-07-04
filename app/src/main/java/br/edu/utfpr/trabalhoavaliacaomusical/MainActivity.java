@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
         DialogInterface.OnClickListener listener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
+                    //System.out.println("deletando avaliacao " + avaliacao.getId() + "-" + avaliacao.getAlbum());
 
                     AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(MainActivity.this);
 
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                     if (quantidadeDeletada > 0) {
                         avaliacoes.remove(posicaoSelecionada);
                         adapter.notifyDataSetChanged();
-                        actionMode.finish();
+                        break;
                     } else {
                         UtilsGui.aviso(MainActivity.this, R.string.erro_ao_tentar_apagar);
                     }
