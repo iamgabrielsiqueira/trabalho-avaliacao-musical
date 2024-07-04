@@ -24,14 +24,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import br.edu.utfpr.trabalhoavaliacaomusical.activities.CadastroAvaliacaoActivity;
 import br.edu.utfpr.trabalhoavaliacaomusical.activities.SobreActivity;
 import br.edu.utfpr.trabalhoavaliacaomusical.adapter.AvaliacaoAdapter;
-import br.edu.utfpr.trabalhoavaliacaomusical.classes.Avaliacao;
+import br.edu.utfpr.trabalhoavaliacaomusical.modelo.Avaliacao;
+import br.edu.utfpr.trabalhoavaliacaomusical.persistencia.AvaliacoesDatabase;
 import br.edu.utfpr.trabalhoavaliacaomusical.utils.UtilsGui;
 
 public class MainActivity extends AppCompatActivity {
@@ -94,21 +94,29 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void excluirAvaliacao() {
-        Avaliacao avaliacao = avaliacoes.get(posicaoSelecionada);
+        final Avaliacao avaliacao = avaliacoes.get(posicaoSelecionada);
 
         String mensagem = getString(R.string.voce_realmente_deseja_apagar)
                 + "\n"
                 + "\""
-                + avaliacao.getNomeAlbum()
+                + avaliacao.getAlbum()
                 + "\"";
 
         DialogInterface.OnClickListener listener = (dialog, which) -> {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE:
-                    avaliacoes.remove(posicaoSelecionada);
-                    adapter.notifyDataSetChanged();
 
-                    break;
+                    AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(MainActivity.this);
+
+                    int quantidadeDeletada = database.getAvaliacaoDao().delete(avaliacao);
+
+                    if (quantidadeDeletada > 0) {
+                        avaliacoes.remove(posicaoSelecionada);
+                        adapter.notifyDataSetChanged();
+                        actionMode.finish();
+                    } else {
+                        UtilsGui.aviso(MainActivity.this, R.string.erro_ao_tentar_apagar);
+                    }
                 case DialogInterface.BUTTON_NEGATIVE:
                     break;
             }
@@ -139,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
             Avaliacao avaliacao = (Avaliacao) listViewAvaliacoes.getItemAtPosition(position);
 
             String msg = getString(R.string.o_album) +
-                    avaliacao.getNomeAlbum() +
+                    avaliacao.getAlbum() +
                     getString(R.string.foi_selecionado);
 
             Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
@@ -182,10 +190,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void populaLista() {
-        avaliacoes = new ArrayList<>();
+        AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(this);
 
-        Avaliacao avaliacao = new Avaliacao("Teste", "Teste", 3);
-        avaliacoes.add(avaliacao);
+        if (ordenacaoAscendente) {
+            avaliacoes = database.getAvaliacaoDao().queryAllAscending();
+        } else {
+            avaliacoes = database.getAvaliacaoDao().queryAllDownward();
+        }
 
         adapter = new AvaliacaoAdapter(this, avaliacoes);
 
@@ -202,11 +213,11 @@ public class MainActivity extends AppCompatActivity {
                         Bundle bundle = intent.getExtras();
 
                         if (bundle != null) {
-                            String nomeAlbum = bundle.getString(CadastroAvaliacaoActivity.NOME_ALBUM);
-                            String artista = bundle.getString(CadastroAvaliacaoActivity.ARTISTA);
-                            int classificacao = bundle.getInt(CadastroAvaliacaoActivity.CLASSIFICACAO);
+                            long id = bundle.getLong(CadastroAvaliacaoActivity.ID);
 
-                            Avaliacao avaliacao = new Avaliacao(nomeAlbum, artista, classificacao);
+                            AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(MainActivity.this);
+
+                            Avaliacao avaliacao = database.getAvaliacaoDao().queryForId(id);
 
                             avaliacoes.add(avaliacao);
 
@@ -227,15 +238,13 @@ public class MainActivity extends AppCompatActivity {
                         Bundle bundle = intent.getExtras();
 
                         if (bundle != null) {
-                            String album = bundle.getString(CadastroAvaliacaoActivity.NOME_ALBUM);
-                            String artista = bundle.getString(CadastroAvaliacaoActivity.ARTISTA);
-                            int classificacao = bundle.getInt(CadastroAvaliacaoActivity.CLASSIFICACAO);
+                            long id = bundle.getLong(CadastroAvaliacaoActivity.ID);
 
-                            Avaliacao avaliacao = avaliacoes.get(posicaoSelecionada);
+                            AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(MainActivity.this);
 
-                            avaliacao.setNomeAlbum(album);
-                            avaliacao.setNomeArtista(artista);
-                            avaliacao.setNota(classificacao);
+                            Avaliacao avaliacaoEditada = database.getAvaliacaoDao().queryForId(id);
+
+                            avaliacoes.set(posicaoSelecionada, avaliacaoEditada);
 
                             posicaoSelecionada = -1;
 

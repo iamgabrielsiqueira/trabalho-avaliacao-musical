@@ -14,7 +14,7 @@ import java.sql.Date;
 import java.util.List;
 
 import br.edu.utfpr.trabalhoavaliacaomusical.R;
-import br.edu.utfpr.trabalhoavaliacaomusical.classes.Avaliacao;
+import br.edu.utfpr.trabalhoavaliacaomusical.modelo.Avaliacao;
 
 public class AvaliacaoAdapter extends BaseAdapter {
     private final Context context;
@@ -73,19 +73,19 @@ public class AvaliacaoAdapter extends BaseAdapter {
             holder = (AvaliacaoHolder) convertView.getTag();
         }
 
-        holder.textViewNomeAlbum.setText(avaliacoes.get(position).getNomeAlbum());
-        holder.textViewNomeArtista.setText(avaliacoes.get(position).getNomeArtista());
-        holder.textViewDataAvaliado.setText(this.formatarData(avaliacoes.get(position).getDataAvaliado()));
+        holder.textViewNomeAlbum.setText(avaliacoes.get(position).getAlbum());
+        holder.textViewNomeArtista.setText(avaliacoes.get(position).getArtista());
+        holder.textViewDataAvaliado.setText(this.formatarData(avaliacoes.get(position).getData()));
         holder.ratingBarClassificacao.setRating(avaliacoes.get(position).getNota());
 
         return convertView;
     }
 
     @NonNull
-    private String formatarData(@NonNull Date data) {
-        String ano = data.toString().substring(0, 4);
-        String mes = data.toString().substring(5, 7);
-        String dia = data.toString().substring(8, 10);
+    private String formatarData(@NonNull String data) {
+        String ano = data.substring(0, 4);
+        String mes = data.substring(5, 7);
+        String dia = data.substring(8, 10);
 
         return dia + "/" + mes + "/" + ano;
     }

@@ -16,7 +16,6 @@
     <string name="foi_selecionado">" was selected"</string>
     <string name="avaliar">Rate</string>
     <string name="nome_album">Album name</string>
-    <string name="data_lancamento">Release date</string>
     <string name="artista">Artist</string>
     <string name="preencha_todos_os_campos">Fill all the fields!</string>
     <string name="nova_avaliacao">New Rating</string>
@@ -25,9 +24,12 @@
     <string name="limpar">Clear</string>
     <string name="campos_limpos">Fields cleaned!</string>
     <string name="aviso">Warning</string>
-    <string name="ok">Ok</string>
+    <string name="ok" translatable="false">Ok</string>
     <string name="confirmacao">Confirmation</string>
     <string name="sim">Yes</string>
     <string name="nao">No</string>
     <string name="voce_realmente_deseja_apagar">Do you really want to delete?</string>
+    <string name="erro_ao_tentar_inserir">Error trying to insert!</string>
+    <string name="erro_ao_tentar_atualizar">Error trying to update!</string>
+    <string name="erro_ao_tentar_apagar">Error trying to delete!</string>
 </resources>

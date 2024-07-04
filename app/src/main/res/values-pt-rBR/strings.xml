@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Avaliação musical</string>
+    <string name="ultimas_avaliacoes">Ultimas avaliações</string>
+    <string name="sobre">Sobre</string>
+    <string name="adicionar">Adicionar</string>
+    <string name="ordenacao">Ordenação</string>
+    <string name="sobre_este_app">Sobre este app</string>
+    <string name="autor">Autor: Gabriel Siqueira de Carvalho</string>
+    <string name="curso">Especializacão em Java</string>
+    <string name="descricao">Aplicativo feito para avaliar albuns.</string>
+    <string name="editar">Editar</string>
+    <string name="excluir">Excluir</string>
+    <string name="o_album">O album</string>
+    <string name="foi_selecionado">foi selecionado</string>
+    <string name="avaliar">Avaliar</string>
+    <string name="nome_album">Nome do album</string>
+    <string name="artista">Artista</string>
+    <string name="preencha_todos_os_campos">Preencha todos os campos!</string>
+    <string name="nova_avaliacao">Nova avaliação</string>
+    <string name="editar_avaliacao">Editar avaliação</string>
+    <string name="salvar">Salvar</string>
+    <string name="limpar">Limpar</string>
+    <string name="campos_limpos">Campos limpos!</string>
+    <string name="aviso">Aviso</string>
+    <string name="confirmacao">Confirmação</string>
+    <string name="sim">Sim</string>
+    <string name="nao">Não</string>
+    <string name="voce_realmente_deseja_apagar">Você realmente deseja apagar?</string>
+    <string name="erro_ao_tentar_inserir">Erro ao tentar inserir!</string>
+    <string name="erro_ao_tentar_atualizar">Erro ao tentar atualizar!</string>
+    <string name="erro_ao_tentar_apagar">Erro ao tentar deletar!</string>
+</resources>

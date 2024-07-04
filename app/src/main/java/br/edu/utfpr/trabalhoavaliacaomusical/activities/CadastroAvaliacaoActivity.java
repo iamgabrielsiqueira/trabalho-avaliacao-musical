@@ -18,28 +18,28 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.sql.Date;
+
 import br.edu.utfpr.trabalhoavaliacaomusical.R;
-import br.edu.utfpr.trabalhoavaliacaomusical.classes.Avaliacao;
+import br.edu.utfpr.trabalhoavaliacaomusical.modelo.Avaliacao;
+import br.edu.utfpr.trabalhoavaliacaomusical.persistencia.AvaliacoesDatabase;
+import br.edu.utfpr.trabalhoavaliacaomusical.utils.UtilsGui;
 
 public class CadastroAvaliacaoActivity extends AppCompatActivity {
     private EditText editTextAlbum, editTextArtista;
 
     private RatingBar ratingBarAlbum;
 
-    public static final String NOME_ALBUM = "NOME_ALBUM";
-    public static final String ARTISTA = "ARTISTA";
-    public static final String CLASSIFICACAO = "CLASSIFICACAO";
-
     public static final String MODO = "MODO";
+
+    public static final String ID = "ID";
 
     public static final int NOVO = 1;
     public static final int EDITAR = 2;
 
     private int modo;
 
-    private String nomeOriginal;
-    private String artistaOriginal;
-    private int classificacaoOriginal;
+    private Avaliacao avaliacaoOriginal;
 
     @SuppressLint("MissingInflatedId")
     @Override
@@ -69,13 +69,15 @@ public class CadastroAvaliacaoActivity extends AppCompatActivity {
             } else if (modo == EDITAR) {
                 setTitle(getString(R.string.editar_avaliacao));
 
-                nomeOriginal = bundle.getString(NOME_ALBUM);
-                artistaOriginal = bundle.getString(ARTISTA);
-                classificacaoOriginal = bundle.getInt(CLASSIFICACAO);
+                long id = bundle.getLong(ID);
 
-                editTextAlbum.setText(nomeOriginal);
-                editTextArtista.setText(artistaOriginal);
-                ratingBarAlbum.setRating(classificacaoOriginal);
+                AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(this);
+
+                avaliacaoOriginal = database.getAvaliacaoDao().queryForId(id);
+
+                editTextAlbum.setText(avaliacaoOriginal.getAlbum());
+                editTextArtista.setText(avaliacaoOriginal.getArtista());
+                ratingBarAlbum.setRating(avaliacaoOriginal.getNota());
             }
         }
 
@@ -102,9 +104,7 @@ public class CadastroAvaliacaoActivity extends AppCompatActivity {
 
         intent.putExtra(MODO, EDITAR);
 
-        intent.putExtra(NOME_ALBUM, avaliacao.getNomeAlbum());
-        intent.putExtra(ARTISTA, avaliacao.getNomeArtista());
-        intent.putExtra(CLASSIFICACAO, avaliacao.getNota());
+        intent.putExtra(ID, avaliacao.getId());
 
         launcher.launch(intent);
     }
@@ -123,9 +123,39 @@ public class CadastroAvaliacaoActivity extends AppCompatActivity {
         } else {
             Intent intent = new Intent();
 
-            intent.putExtra(NOME_ALBUM, nomeAlbum);
-            intent.putExtra(ARTISTA, artista);
-            intent.putExtra(CLASSIFICACAO, classificacao);
+            AvaliacoesDatabase database = AvaliacoesDatabase.getDatabase(this);
+
+            if (modo == NOVO) {
+                String data = new Date(System.currentTimeMillis()).toString();
+
+                Avaliacao avaliacao = new Avaliacao(nomeAlbum, artista, classificacao, data);
+
+                long id = database.getAvaliacaoDao().insert(avaliacao);
+
+                if (id <= 0) {
+                    UtilsGui.aviso(this, R.string.erro_ao_tentar_inserir);
+                    return;
+                }
+
+                avaliacao.setId(id);
+
+                intent.putExtra(ID, avaliacao.getId());
+            } else if (modo == EDITAR) {
+                String data = new Date(System.currentTimeMillis()).toString();
+
+                Avaliacao avaliacaoAlterada = new Avaliacao(nomeAlbum, artista, classificacao, data);
+
+                avaliacaoAlterada.setId(avaliacaoOriginal.getId());
+
+                int quantidadeAlterada = database.getAvaliacaoDao().update(avaliacaoAlterada);
+
+                if (quantidadeAlterada <= 0) {
+                    UtilsGui.aviso(this, R.string.erro_ao_tentar_atualizar);
+                    return;
+                }
+
+                intent.putExtra(ID, avaliacaoAlterada.getId());
+            }
 
             setResult(CadastroAvaliacaoActivity.RESULT_OK, intent);
 
