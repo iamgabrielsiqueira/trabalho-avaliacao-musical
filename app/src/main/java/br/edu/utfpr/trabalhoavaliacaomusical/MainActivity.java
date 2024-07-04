@@ -2,6 +2,7 @@ package br.edu.utfpr.trabalhoavaliacaomusical;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -31,6 +32,7 @@ import br.edu.utfpr.trabalhoavaliacaomusical.activities.CadastroAvaliacaoActivit
 import br.edu.utfpr.trabalhoavaliacaomusical.activities.SobreActivity;
 import br.edu.utfpr.trabalhoavaliacaomusical.adapter.AvaliacaoAdapter;
 import br.edu.utfpr.trabalhoavaliacaomusical.classes.Avaliacao;
+import br.edu.utfpr.trabalhoavaliacaomusical.utils.UtilsGui;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -92,9 +94,27 @@ public class MainActivity extends AppCompatActivity {
     };
 
     private void excluirAvaliacao() {
-        avaliacoes.remove(posicaoSelecionada);
+        Avaliacao avaliacao = avaliacoes.get(posicaoSelecionada);
 
-        adapter.notifyDataSetChanged();
+        String mensagem = getString(R.string.voce_realmente_deseja_apagar)
+                + "\n"
+                + "\""
+                + avaliacao.getNomeAlbum()
+                + "\"";
+
+        DialogInterface.OnClickListener listener = (dialog, which) -> {
+            switch (which) {
+                case DialogInterface.BUTTON_POSITIVE:
+                    avaliacoes.remove(posicaoSelecionada);
+                    adapter.notifyDataSetChanged();
+
+                    break;
+                case DialogInterface.BUTTON_NEGATIVE:
+                    break;
+            }
+        };
+
+        UtilsGui.confirmaAcao(this, mensagem, listener);
     }
 
     private void editarAvaliacao() {

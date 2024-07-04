@@ -24,4 +24,10 @@
     <string name="salvar">Save</string>
     <string name="limpar">Clear</string>
     <string name="campos_limpos">Fields cleaned!</string>
+    <string name="aviso">Warning</string>
+    <string name="ok">Ok</string>
+    <string name="confirmacao">Confirmation</string>
+    <string name="sim">Yes</string>
+    <string name="nao">No</string>
+    <string name="voce_realmente_deseja_apagar">Do you really want to delete?</string>
 </resources>
